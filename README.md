@@ -86,7 +86,7 @@ sudo tc qdisc add dev eth1 handle 1: root tbf rate 10Mbit burst 1514 latency 100
 sudo tc qdisc add dev eth1 handle 2: parent 1:1 $QDISC_NAME $QDISC_PARAMS_DOWN
 ```
 
-The above setup was for 1/10 Mbit uplink/downlink link. The experiment can be run similarly for 10/10 Mbit link. The parameters for various qdiscs for these two link setup is provided in this file.
+The above setup was for 1/10 Mbit uplink/downlink link. The experiment can be run similarly for 10/10 Mbit link. The parameters for various qdiscs for these two link setup is provided here [for 1/10 link](mycode/parameter1.sh) and [for 10/10 link](mycode/parameter10.sh).
 
 Note: You can check the qdisc status using
 ```
@@ -111,8 +111,7 @@ netserver &
 ### Throughput and latency test
 
 
-### transient analysis test
-Start test for 25+10=30sec  
+Start test for 25 sec. Note that flent automatically adds 5 sec at the start and 5 sec towards the end of the test. So, the test will run for 30sec. Save the output in [filename-codel-1.csv](filename-codel-1.csv)  
 ```
 flent rrul -H server -l 25 -f csv > "filename-codel-1.csv"
 ```
@@ -141,12 +140,13 @@ grep "Ping (ms) avg" "filename-$QD-$iter.csv" | awk -vORS=, '{print $6}' >> "$fi
 ## Run the experiment using script
 Follow these steps to run the experiment
 
-* For RRUL test, go to `mycode` directory and for fairness test go to `my2code` directory
-* Modify ish_setup_qdiscs.sh and maincode.sh to update the ssh and scp commands.
+* For RRUL test, go to [mycode](mycode) directory and for fairness test go to [my2code](my2code) directory
+* Modify `ish_setup_qdiscs.sh` and `maincode.sh` located in the above directories to update the ssh and scp commands.
 * Run  bash maincode.sh 10 (you can change the parameter to 1, or 10, or 100 for 10/1, 10/10. 100/100 links)
 * The desired results would be saved in a directory named `DataDir` on local machine. 
-* Use Matlab scripts to plot the results. Use rrulTest.m and transiTest.m for RRUL test data. Use fairTest.m for Fairness test data.
+* Use Matlab scripts to plot the results. Use [rrulTest.m](rrulTest.m) and [transiTest.m](transiTest.m) for RRUL test data. Use [fairTest.m](fairTest.m) for Fairness test data.
 
 ## Results
 
+The plots can be found in directory [Matlab results](Matlab%20results). For detailed descriptions, look at the [project report](AQM_Report_Ish) and [slides](Ish_AQM_slides)
 
