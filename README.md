@@ -123,9 +123,30 @@ First remove the first three lines of irrelevent data
 sed -i '1,3d' filename-codel-1.csv
 ```
 The useful columns are `"TCP upload sum"` at `$3`, `"Ping (ms) avg"` at `$8`, and `"TCP download sum"` at `$18`
-We will plot the 
+We evaluate the average upload and download throughput as
+```
+awk -F"," '{sum=sum+$3}END{if(NR>0) print "Avg Upload Throughput="sum/NR}' filename-codel-1.csv 
+awk -F"," '{sum=sum+$18}END{if(NR>0) print "Avg Download Throughput="sum/NR}' filename-codel-1.csv 
+```
+This gives
+  Avg Upload Throughput=0.0250601
+  Avg Download Throughput=42.3456
+  
 
+<!---
 ```
 grep "Ping (ms) avg" "filename-$QD-$iter.csv" | awk -vORS=, '{print $6}' >> "$filename".csv
 ```
+--->
 ## Run the experiment using script
+Follow these steps to run the experiment
+
+* For RRUL test, go to `mycode` directory and for fairness test go to `my2code` directory
+* Modify ish_setup_qdiscs.sh and maincode.sh to update the ssh and scp commands.
+* Run  bash maincode.sh 10 (you can change the parameter to 1, or 10, or 100 for 10/1, 10/10. 100/100 links)
+* The desired results would be saved in a directory named `DataDir` on local machine. 
+* Use Matlab scripts to plot the results. Use rrulTest.m and transiTest.m for RRUL test data. Use fairTest.m for Fairness test data.
+
+## Results
+
+
